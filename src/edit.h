@@ -1,11 +1,11 @@
 #pragma once
-#include<string>
+#include <string>
 #include <algorithm>
-#include<vector>
-#include<set>
-#include<math.h>
-#include<cmath>
-#include<fstream>
+#include <vector>
+#include <set>
+#include <math.h>
+#include <cmath>
+#include <fstream>
 #include <stdlib.h>
 #include <utility>
 using namespace std;

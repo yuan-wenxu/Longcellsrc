@@ -1,10 +1,10 @@
 #include <Rcpp.h>
-#include<string>
+#include <string>
 #include <algorithm>
-#include<vector>
-#include<set>
-#include<math.h>
-#include<cmath>
+#include <vector>
+#include <set>
+#include <math.h>
+#include <cmath>
 #include <stack>
 
 using namespace std;

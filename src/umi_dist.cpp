@@ -1,5 +1,6 @@
 #include "umi_dist.h"
 #include "edit.h"
+#include "isoform_core.h"
 
 int UMI_NS[20000][20000] = {};
 int UMI_CORRES[400000] = {};
@@ -36,20 +37,7 @@ std::vector<std::string> str_split(std::string s, std::string split){
 std::vector<int> isoform2sites(std::string iso,
                                       const std::string split,
                                       const std::string sep){
-  std::vector<std::string> exons = str_split(iso,split);
-
-  std::vector<std::vector<std::string> > bins;
-  int len = exons.size();
-  for(int i = 0;i < len;i++){
-    bins.push_back(str_split(exons[i],sep));
-  }
-  std::vector<std::string> sites_chr = flatten(bins);
-
-  std::vector<int> sites_int;
-  transform(sites_chr.begin(), sites_chr.end(), back_inserter(sites_int),
-            [](const std::string& str) { return static_cast<int>(std::stod(str)); });
-
-  return(sites_int);
+  return longcellsrc::isoform2sites_core(iso, split, sep);
 }
 
 
@@ -301,33 +289,23 @@ NumericMatrix isoset_mid_diff(std::vector<std::string> iso_set1,
                               const int end_bias,
                               std::string split,
                               std::string sep){
-  int iso1_size = iso_set1.size();
-  int iso2_size = iso_set2.size();
+  std::vector<longcellsrc::IsoSetMidDiffRow> rows = longcellsrc::isoset_mid_diff_core(
+      iso_set1, iso_set2, thresh, overlap_thresh, end_bias, split, sep);
 
-  NumericMatrix iso_dis (iso1_size*iso2_size,4);
-  int id = 0;
+  if (rows.empty()) {
+    NumericMatrix empty(1, 4);
+    empty(0, 0) = -1;
+    return empty;
+  }
 
-  for(int i = 0;i < iso1_size;i++){
-    for(int j = 0;j < iso2_size;j++){
-      NumericVector out = iso2_mid_diff(iso_set1[i],iso_set2[j],end_bias,
-                               split,sep);
-      int dis = out[0];
-      double ratio = out[1];
-        //cout << i << "-" << j<<":" << dis << endl;
-      if(dis >=0 && dis <= thresh && ratio >= overlap_thresh){
-        iso_dis(id,0) = double(i);
-        iso_dis(id,1) = double(j);
-        iso_dis(id,2) = double(dis);
-        iso_dis(id,3) = double(ratio);
-        id = id+ 1;
-      }
-    }
+  NumericMatrix iso_dis(rows.size(), 4);
+  for (size_t i = 0; i < rows.size(); ++i) {
+    iso_dis(i, 0) = rows[i].index1;
+    iso_dis(i, 1) = rows[i].index2;
+    iso_dis(i, 2) = rows[i].dis;
+    iso_dis(i, 3) = rows[i].overlap;
   }
-  if(id == 0){
-    iso_dis(id,0) = -1;
-    id = 1;
-  }
-  return(iso_dis(Range(0,id-1),_));
+  return iso_dis;
 }
 
 

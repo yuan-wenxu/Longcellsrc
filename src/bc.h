@@ -3,8 +3,8 @@
 #include <string>
 #include <set>
 #include <algorithm>
-#include<math.h>
-#include<cmath>
+#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 #include <utility>
 #include <iostream>
