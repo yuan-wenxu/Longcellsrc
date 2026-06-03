@@ -1,0 +1,45 @@
+# ========================
+# R / RStudio
+# ========================
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rcheck/
+/*.tar.gz
+
+# ========================
+# C / C++ compiled objects
+# ========================
+*.o
+*.so
+*.dll
+*.dylib
+*.a
+
+# ========================
+# Python
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+*.eggs/
+dist/
+build/
+*.cpython-*.so
+
+# ========================
+# OS files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# IDE / Editor
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
